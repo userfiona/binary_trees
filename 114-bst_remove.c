@@ -45,7 +45,7 @@ int replace_with_successor(bst_t *root)
  */
 int remove_node_type(bst_t *root)
 {
-	// Implementation remains unchanged
+
 }
 
 /**
