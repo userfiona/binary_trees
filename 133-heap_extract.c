@@ -1,13 +1,14 @@
 #include "binary_trees.h"
 
 /**
- * heap_to_
- * sorted_array - converts a Binary Max Heap to a sorted array of integers.
+ * binary_tree_is_heap - checks if a binary tree
+ * is a valid Max Binary Heap
  *
- * @root: double pointer to the root node of heap
- * Return: value stored in the root node
+ * @tree: Pointer to tree's node
+ *
+ * Return: 1 if the tree is a max heap, 0 otherwise
  */
-int heap_extract(heap_t **root)
+int binary_tree_is_heap(const binary_tree_t *tree)
 {
-	return (root);
+	return (tree);
 }
