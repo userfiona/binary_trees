@@ -1,17 +1,22 @@
-#include "binary_trees.h"
-
 /**
- * heap_extract - Extracts the root value from a Binary Max Heap.
+ * heapify_down - Restores the max heap property downwards.
  *
- * @root: Double pointer to the root node of the heap.
- * Return: Value stored in the root node.
+ * @root: Pointer to the root node of the heap.
  */
-int heap_extract(heap_t **root)
+void heapify_down(heap_t *root)
 {
-	if (!root || !*root)
-		return (0);
+	heap_t *largest = root;
+	heap_t *left = root->left;
+	heap_t *right = root->right;
 
-	int extracted_value = (*root)->n;
+	if (left && left->n > largest->n)
+		largest = left;
+	if (right && right->n > largest->n)
+		largest = right;
 
-	return (extracted_value);
+	if (largest != root)
+	{
+		swap(root, largest);
+		heapify_down(largest);
+	}
 }
