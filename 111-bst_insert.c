@@ -1,49 +1,77 @@
 #include "binary_trees.h"
+
 /**
- * bst_insert - insert nodes in order to create a BST tree
- * @tree: tree to create with type BST
- * @value: value of node to insert
- * Return: BST tree
+ * bst_t *bst_insert - Inserts a value in a Binary Search Tree.
+ * @tree: Double pointer to the root node of the BST to insert the value.
+ * @value: Value to store in the node to be inserted.
+ * Return: Pointer to the created node, or NULL on failure.
  */
 bst_t *bst_insert(bst_t **tree, int value)
 {
-	bst_t *new, *temp;
-	binary_tree_t *aux;
-
-	if (tree == NULL)
-		return (NULL);
+	if (!tree)
+		return NULL;
 
 	if (*tree == NULL)
 	{
-		aux = binary_tree_node((binary_tree_t *)(*tree), value);
-		new = (bst_t *)aux;
-		*tree = new;
+		*tree = binary_tree_node(NULL, value);
+		return *tree;
 	}
+
+	if (value < (*tree)->n)
+		return bst_insert(&((*tree)->left), value);
+	else if (value > (*tree)->n)
+		return bst_insert(&((*tree)->right), value);
+
+	return NULL;
+}
+
+/**
+ * bst_remove - Removes a node from a Binary Search Tree.
+ * @root: Pointer to the root node of the tree where you will remove a node.
+ * @value: Value to remove in the tree.
+ * Return: Pointer to the new root node of the tree after removing the desired value.
+ */
+bst_t *bst_remove(bst_t *root, int value)
+{
+	if (!root)
+		return NULL;
+
+	if (value < root->n)
+		root->left = bst_remove(root->left, value);
+	else if (value > root->n)
+		root->right = bst_remove(root->right, value);
 	else
 	{
-		temp = *tree;
-		if (value < temp->n)
+		if (!root->left)
 		{
-			if (temp->left)
-				new = bst_insert(&temp->left, value);
-			else
-			{
-				aux = binary_tree_node((binary_tree_t *)temp, value);
-				new = temp->left = (bst_t *)aux;
-			}
+			bst_t *temp = root->right;
+			free(root);
+			return temp;
 		}
-		else if (value > temp->n)
+		else if (!root->right)
 		{
-			if (temp->right)
-				new = bst_insert(&temp->right, value);
-			else
-			{
-				aux = binary_tree_node((binary_tree_t *)temp, value);
-				new = temp->right = aux;
-			}
+			bst_t *temp = root->left;
+			free(root);
+			return temp;
 		}
-		else
-			return (NULL);
+
+		bst_t *temp = binary_tree_min_value_node(root->right);
+		root->n = temp->n;
+		root->right = bst_remove(root->right, temp->n);
 	}
-	return (new);
+
+	return root;
+}
+
+/**
+ * binary_tree_min_value_node - Finds the node with the minimum value in a BST.
+ * @node: Pointer to the root node of the BST.
+ * Return: Pointer to the node with the minimum value.
+ */
+bst_t *binary_tree_min_value_node(bst_t *node)
+{
+	bst_t *current = node;
+	while (current && current->left)
+		current = current->left;
+	return current;
 }
