@@ -1,3 +1,5 @@
+#include "binary_trees.h"
+
 /**
  * heapify_down - Restores the max heap property downwards.
  *
@@ -10,9 +12,14 @@ void heapify_down(heap_t *root)
 	heap_t *right = root->right;
 
 	if (left && left->n > largest->n)
+	{
 		largest = left;
+	}
+
 	if (right && right->n > largest->n)
+	{
 		largest = right;
+	}
 
 	if (largest != root)
 	{
