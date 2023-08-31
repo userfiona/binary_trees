@@ -74,5 +74,5 @@ bst_t *bst_remove(bst_t *root, int value)
 	else
 		return (NULL);
 
-	return root;
+	return (root);
 }
