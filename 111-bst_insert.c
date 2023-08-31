@@ -9,7 +9,7 @@
 bst_t *bst_insert(bst_t **tree, int value)
 {
 	if (!tree)
-		return (NULL);
+		return ((NULL));
 
 	if (*tree == NULL)
 	{
@@ -18,8 +18,9 @@ bst_t *bst_insert(bst_t **tree, int value)
 	}
 
 	if (value < (*tree)->n)
-		return (bst_insert(&((*tree)->left), value));
+		return (bst_insert(&(*tree)->left, value));
 	else if (value > (*tree)->n)
-		return (bst_insert(&((*tree)->right), value));
+		return (bst_insert(&(*tree)->right, value));
+
 	return (NULL);
 }
