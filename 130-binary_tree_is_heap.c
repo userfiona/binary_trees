@@ -1,23 +1,25 @@
+#include <stdio.h>
 #include "binary_trees.h"
 
 /**
- * binary_tree_is_heap - function to check if a binary tree is a valid Max Heap
- * @tree: pointer to the root node of the tree to check
- * Return: 1 if tree is a valid Max Heap, 0 otherwise
+ * main - Entry point
+ *
+ * Return: Always 0 (Success)
  */
-int binary_tree_is_heap(const binary_tree_t *tree)
+int main(void)
 {
-	if (!tree)
-		return (0);
+	binary_tree_t *root = ...;
 
-	if (!tree->left && !tree->right)
-		return (1);
+	int is_heap = binary_tree_is_heap(root);
 
-	if (tree->left && tree->left->n > tree->n)
-		return (0);
+	if (is_heap)
+	{
+		printf("The tree is a valid Max Heap.\n");
+	}
+	else
+	{
+		printf("The tree is not a valid Max Heap.\n");
+	}
 
-	if (tree->right && tree->right->n > tree->n)
-		return (0);
-
-	return (binary_tree_is_heap(tree->left) && binary_tree_is_heap(tree->right));
+	return (0);
 }
