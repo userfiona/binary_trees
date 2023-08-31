@@ -10,21 +10,22 @@ int tree_is_perfect(const binary_tree_t *tree)
 	int l = 0, r = 0;
 
 	if (!tree)
-		return -1;
+		return (-1);
 
 	if (tree->left && tree->right)
 	{
 		l = tree_is_perfect(tree->left);
 		r = tree_is_perfect(tree->right);
 		if (l == r && l != -1 && r != -1)
-			return l + 1;
-		return -1;
+			return (l + 1);
+		return (-1);
+
 	}
 	else if (!tree->left && !tree->right)
 	{
-		return 0;
+		return (0);
 	}
-	return -1;
+	return (-1);
 }
 
 /**
@@ -35,7 +36,7 @@ int tree_is_perfect(const binary_tree_t *tree)
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
 	if (!tree)
-		return 0;
+		return (0);
 
-	return tree_is_perfect(tree) != -1;
+	return (tree_is_perfect(tree) != -1);
 }
