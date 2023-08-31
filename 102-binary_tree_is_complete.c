@@ -1,58 +1,64 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_is_complete - checks if a binary tree is complete
- * @tree: a pointer to the root node of the tree to check
+ * count_nodes - Counts ths inside a tree
+ * @root:  node
  *
- * Return: 1 if the tree is complete
- *         0 if the tree is not complete
- *         0 if tree is NULL
+ * Return: Number odes
+ */
+
+int count_nodes(binary_tree_t *root)
+{
+	if (!root)
+		return (0);
+
+	return (1 + count_nodes(root->left) + count_nodes(root->right));
+}
+
+
+/**
+ * is_complete - Checks if a tree is complete
+ * @root: Pointer to tree's root
+ * @index: Index of the node been evaluated
+ * @n: number of trees nod
+ *
+ * Return: 1 if the tree is a heap, 0 otherwise
+ */
+
+int is_complete(binary_tree_t *root, int index, int n)
+{
+	if (!root)
+		return (0);
+
+	if (index >= n)
+		return (0);
+	if (!root->left && !root->right)
+		return (1);
+	if (root->right && !root->left)
+		return (0);
+	if (root->left && !root->right)
+		return (is_complete(root->left, index * 2 + 1, n));
+
+	return (is_complete(root->left, index * 2 + 1, n) &&
+		is_complete(root->right, index * 2 + 2, n));
+}
+
+/**
+ * binary_tree_is_complete - check for bt complete
+ * @tree: Pointer to root
+ *
+ * Return: 1 if
  */
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
-	size_t size;
+	int nod;
+	binary_tree_t *root;
 
 	if (!tree)
 		return (0);
-	size = binary_tree_size(tree);
 
-	return (btic_helper(tree, 0, size));
-}
+	root = (binary_tree_t *)tree;
+	nod = count_nodes(root);
 
-/**
- * btic_helper - checks if a binary tree is complete
- * @tree: a pointer to the root node of the tree to check
- * @index: node index to check
- * @size: number of nodes in the tree
- *
- * Return: 1 if the tree is complete
- *         0 if the tree is not complete
- *         0 if tree is NULL
- */
-int btic_helper(const binary_tree_t *tree, size_t index, size_t size)
-{
-	if (!tree)
-		return (1);
-
-	if (index >= size)
-		return (0);
-
-	return (btic_helper(tree->left, 2 * index + 1, size) &&
-		btic_helper(tree->right, 2 * index + 2, size));
-}
-
-/**
- * binary_tree_size - measures the size of a binary tree
- * @tree: tree to measure the size of
- *
- * Return: size of the tree
- *         0 if tree is NULL
- */
-size_t binary_tree_size(const binary_tree_t *tree)
-{
-	if (!tree)
-		return (0);
-
-	return (binary_tree_size(tree->left) +
-		binary_tree_size(tree->right) + 1);
+	return (is_complete(root, 0, nod));
 }
