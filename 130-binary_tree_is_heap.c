@@ -1,13 +1,10 @@
 #include <stdio.h>
 #include "binary_trees.h"
 
-/**
- * main - Entry point
- *
- * Return: Always 0 (Success)
- */
 int main(void)
 {
+	/* Create your binary tree or use an existing one */
+
 	binary_tree_t *root = ...;
 
 	int is_heap = binary_tree_is_heap(root);
