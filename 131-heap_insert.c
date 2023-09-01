@@ -1,52 +1,103 @@
 #include "binary_trees.h"
+size_t bts(const binary_tree_t *tree);
+heap_t *heap_nf(heap_t *root, size_t number);
+heap_t *heap_r(heap_t *new, heap_t *parent);
 
 /**
- * heapify_up - corrects the Max Heap property by moving the node up
- * @node: pointer to the node to be moved up
+ * heap_insert - heap inserter
+ *
+ * @tree: double pointer to root
+ * @value: the value to store
+ * Return: pointer to the created node
  */
-void heapify_up(heap_t *node)
+heap_t *heap_insert(heap_t **tree, int value)
 {
-	while (node->parent && node->n > node->parent->n)
-	{
-		int temp = node->n;
-		node->n = node->parent->n;
-		node->parent->n = temp;
-		node = node->parent;
-	}
-}
+	size_t size;
+	int doswap = 1;
+	heap_t *new, *parent;
 
-/**
- * heap_insert - inserts a value into a max binary heap
- * @root: double pointer to the root node of the Heap
- * @value: value to store in the node to be inserted
- * Return: pointer to the inserted node, or NULL on failure
- */
-heap_t *heap_insert(heap_t **root, int value)
-{
-	heap_t *new = binary_tree_node(NULL, value);
-
-	if (!new)
+	if (tree == NULL)
 		return (NULL);
 
-	if (!(*root))
+	if (*tree == NULL)
 	{
-		*root = new;
+		new = binary_tree_node(NULL, value);
+		*tree = new;
 		return (new);
 	}
 
-	if ((*root)->left == NULL)
-		(*root)->left = new;
-	else if ((*root)->right == NULL)
-		(*root)->right = new;
-	else if (binary_tree_nodes((*root)->left) <=
-			 binary_tree_nodes((*root)->right))
-		(*root)->left = new;
+	size = bts(*tree);
+	parent = heap_nf(*tree, (size - 1) / 2);
+	new = binary_tree_node(parent, value);
+	if (size % 2 == 1)
+		parent->left = new;
 	else
-		(*root)->right = new;
+		parent->right = new;
+	if (new == NULL)
+		return (NULL);
 
-	new->parent = *root;
-
-	heapify_up(new);
+	while (doswap == 1 && parent != NULL)
+	{
+		if (parent->n >= new->n)
+			doswap = 0;
+		else
+		{
+			new = heap_r(new, parent);
+			parent = new->parent;
+		}
+	}
 
 	return (new);
+}
+
+/**
+ * bts - measure the tree
+ *
+ * @tree: pointer to root
+ * Return: size, otherwise 0
+ */
+
+size_t bts(const binary_tree_t *tree)
+{
+	if (tree == NULL)
+		return (0);
+	return (1 + bts(tree->left) + bts(tree->right));
+}
+
+/**
+ * heap_nf - heap node finder
+ *
+ * @root: pointer to the root
+ * @number: index of the node to find
+ * Return: pointer to the node
+ */
+heap_t *heap_nf(heap_t *root, size_t number)
+{
+	size_t parentn, dir;
+
+	if (number == 0)
+		return (root);
+
+	parentn = (number - 1) / 2;
+	dir = (number - 1) % 2;
+
+	if (dir == 0)
+		return (heap_nf(root, parentn)->left);
+	return (heap_nf(root, parentn)->right);
+}
+
+/**
+ * heap_r - heap rebalancer
+ * @new: pointer to the new node
+ * @parent: pointer to the new parent
+ * Return: parent
+ */
+heap_t *heap_r(heap_t *new, heap_t *parent)
+{
+	int tmp;
+
+	tmp = new->n;
+	new->n = parent->n;
+	parent->n = tmp;
+	return (parent);
 }
