@@ -1,39 +1,63 @@
 #include "binary_trees.h"
 
 /**
- * sorted_array_to_avl - builds an AVL tree from a sorted array
- * @array: pointer to the first element of the array to be converted
- * @size: number of elements in the array
- * Return: pointer to the root node of the created AVL tree, or NULL on failure
+ * create_tree - creates an AVL tree with recursion
+ *
+ * @node: pointer node
+ * @array: input array of integers
+ * @size: size of array
+ * @mode: 1 to adding on the left, 2 to adding on the right
+ * Return: no return
  */
-avl_t *sorted_array_to_avl(int *array, size_t size)
+void create_tree(avl_t **node, int *array, size_t size, int mode)
 {
-	if (!array || size == 0)
-		return NULL;
+	size_t middle;
 
-	return sata_helper(array, 0, size - 1);
+	if (size == 0)
+		return;
+
+	middle = (size / 2);
+	middle = (size % 2 == 0) ? middle - 1 : middle;
+
+	if (mode == 1)
+	{
+		(*node)->left = binary_tree_node(*node, array[middle]);
+		create_tree(&((*node)->left), array, middle, 1);
+		create_tree(&((*node)->left), array + middle + 1, (size - 1 - middle), 2);
+	}
+	else
+	{
+		(*node)->right = binary_tree_node(*node, array[middle]);
+		create_tree(&((*node)->right), array, middle, 1);
+		create_tree(&((*node)->right), array + middle + 1, (size - 1 - middle), 2);
+	}
 }
 
 /**
- * sata_helper - helper that recursively builds an AVL tree from a sorted array
- * @array: pointer to the first element of the array
- * @lo: lower bound index
- * @hi: upper bound index
- * Return: pointer to the root node of the created AVL tree
+ * sorted_array_to_avl - creates root node and calls to create_tree
+ *
+ * @array: input array of integers
+ * @size: size of array
+ * Return: pointer to the root
  */
-avl_t *sata_helper(int *array, size_t lo, size_t hi)
+avl_t *sorted_array_to_avl(int *array, size_t size)
 {
-	if (lo > hi)
-		return NULL;
+	avl_t *root;
+	size_t middle;
 
-	size_t middle = (lo + hi) / 2;
-	avl_t *new_node = binary_tree_node(NULL, array[middle]);
+	root = NULL;
 
-	if (!new_node)
-		return NULL;
+	if (size == 0)
+		return (NULL);
 
-	new_node->left = sata_helper(array, lo, middle - 1);
-	new_node->right = sata_helper(array, middle + 1, hi);
+	middle = (size / 2);
 
-	return new_node;
+	middle = (size % 2 == 0) ? middle - 1 : middle;
+
+	root = binary_tree_node(root, array[middle]);
+
+	create_tree(&root, array, middle, 1);
+	create_tree(&root, array + middle + 1, (size - 1 - middle), 2);
+
+	return (root);
 }
