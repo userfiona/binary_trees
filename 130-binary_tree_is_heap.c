@@ -8,7 +8,7 @@
  */
 int main(void)
 {
-	binary_tree_t *root = ...; /* Initialize your binary tree here */
+	binary_tree_t *root = ...;
 	int is_heap = binary_tree_is_heap(root);
 
 	if (is_heap)
